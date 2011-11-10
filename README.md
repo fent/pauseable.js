@@ -133,7 +133,7 @@ Creates and returns and instance of a pauseable `EventEmitter` and adds it to th
 
 ### group.setTimeout(fn, ms)
 ### group.setInterval(fn, ms)
-Creates an instance of a timer anad adds it to the group.
+Creates an instance of a timer and adds it to the group.
 
 ### group.pause([ms])
 Pauses all emitters and timers in the group.
