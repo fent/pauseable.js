@@ -52,7 +52,7 @@ exports.setInterval = function(beforeExit, assert) {
 
   setTimeout(function() {
     interval.pause(500);
-  }, 1500);
+  }, 1100);
 
   // n is still 1 because interval was paused
   setTimeout(function() {

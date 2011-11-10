@@ -1,4 +1,6 @@
-var p = require('../.');
+var p = require('../.')
+  , EventEmitter = require('events').EventEmitter
+  ;
 
 
 exports.group = function(beforeExit, assert) {
@@ -8,7 +10,7 @@ exports.group = function(beforeExit, assert) {
     , c = false
     ;
   
-  var ee = g.EventEmitter();
+  var ee = g.add(new EventEmitter());
   ee.on('a', function() {
     a++;
   });
