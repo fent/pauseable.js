@@ -16,14 +16,16 @@ Usage
 Using a pauseable EventEmitter
 
 ```javascript
-var pauseable = require('pauseable');
+var pauseable = require('pauseable')
+  , EventEmitter = require('events').EventEmitter
+  ;
 
-var ee = new pauseabale.EventEmitter();
+var ee = new EventEmitter();
 
 ee.on('foo', function() { ... });
 
 // ...later
-ee.pause();
+pauseable.pause(ee);
 
 // this event will not be immediately fired
 // instead, it will be buffered
@@ -31,7 +33,7 @@ ee.emit('foo', 'hellow');
 
 // ...much later
 // the 'foo' event will be fired at this point
-ee.resume();
+pauseable.resume(ee);
 ```
 
 Comes with pauseable setTimeout and setInterval too
@@ -70,8 +72,9 @@ Grouping
 // create a group
 var g = pauseable.createGroup();
 
-var ee1 = g.EventEmitter();
-var ee2 = g.EventEmitter();
+// make and add emitters to group
+var ee1 = group.add(new EventEmitter());
+var ee2 = group.add(new EventEmitter());
 
 ee1.on('forth', function() {
   // pause entire group (that means ee1 and ee2) for 500 ms
@@ -92,15 +95,16 @@ var timeout = g.setTimeout(function() {
 
 API
 ---
-### new pauseable.EventEmitter()
-Creates a new instance of an EventEmitter that is pauseable.
 
-### emitter.pause()
-Pauses events. All events get buffered and emitted once the emitter is resumed.
+##Events
+### pauseable.pause(ee, [ms])
+Pauses an instance of EventEmitter. All events get buffered and emitted once the emitter is resumed. Currently only works with EventEmitters. Optional `ms` will pause only for that long.
 
-### emitter.resume()
-Resumes the emitter. Events can be emitted again.
+### pauseable.resume(ee, [ms])
+Resumes the emitter. Events can be emitted again. Optional `ms` will resume only for that long.
 
+
+##Timers
 ### pauseable.setTimeout(fn, ms) and pauseable.setInterval(fn, ms)
 Creates a pauseable timeout or interval. `fn` and `ms` are interchangeabale. Returns an instance of timer.
 
@@ -125,15 +129,17 @@ Returns `true` if timer was a timeout and `fn` was called, or `timer.clear()` ha
 ### timer.onDone(callback)
 If timer is a timeout, this can be used to execute the `callback` when the `fn` in the constructor is called.
 
-### pauseable.createGroup()
-Creates an `group` where emitters and timers can be easily managed.
 
-### group.EventEmitter()
-Creates and returns and instance of a pauseable `EventEmitter` and adds it to the group.
+##Groups
+### pauseable.createGroup()
+Creates a `group` where emitters and timers can be easily managed.
+
+### group.add()
+Add an emitter or a timer to the group. Returns added emitter/timer.
 
 ### group.setTimeout(fn, ms)
 ### group.setInterval(fn, ms)
-Creates an instance of a timer and adds it to the group.
+Shortcut to create an instance of a timer and add it to the group.
 
 ### group.pause([ms])
 Pauses all emitters and timers in the group.
@@ -148,7 +154,7 @@ Clears timers in the group.
 Returns `true` is group is paused.
 
 ### group.isDone()
-returns `true` if all timers in the group are timeouts and their original function has been called or all timers have been cleared.
+Returns `true` if all timers currently in the group are timeouts and their original function has been called or all timers have been cleared.
 
 ### group.timers()
 Contains both emitters and timers. Useful if you want to micro manage more.

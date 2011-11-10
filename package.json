@@ -2,7 +2,7 @@
   "name": "pauseable",
   "description": "Create event emitters, intervals, and timeouts that can be paused and resumed.",
   "keywords": ["event", "emitter", "timer", "interval", "timeout", "pause", "resume"],
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/fent/pauseable.js",
   "repository": {
     "type": "git",

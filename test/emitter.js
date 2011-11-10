@@ -1,8 +1,10 @@
-var p = require('../.');
+var p = require('../.')
+  , EventEmitter = require('events').EventEmitter
+  ;
 
 
 exports.setTimeout = function(beforeExit, assert) {
-  var ee = new p.EventEmitter()
+  var ee = new EventEmitter()
     , n = 0
     , bar = false
     ;
@@ -19,14 +21,14 @@ exports.setTimeout = function(beforeExit, assert) {
 
   ee.emit('foo', 1, 2);
   assert.eql(n, 1);
-  ee.pause();
+  p.pause(ee);
 
   ee.emit('foo', 1, 2);
   assert.eql(n, 1);
   assert.ok(!bar);
 
   ee.emit('bar', true);
-  ee.resume();
+  p.resume(ee);
   assert.eql(n, 2);
   assert.eql(bar, true);
 
