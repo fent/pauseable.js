@@ -16,6 +16,9 @@
   "engines": {
     "node": "*"
   },
+  "devDependencies": {
+    "expresso": "0.9.x"
+  },
   "licenses": [ {
     "type": "MIT",
     "url" : "http://github.com/fent/pauseable.js/raw/master/LICENSE"
