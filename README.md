@@ -54,9 +54,9 @@ setTimeout(function() {
 }, 2000);
 ```
 
+The `function` and `ms` arguments are interchangeable. Use whichever way you prefer!
+
 ```javascript
-// the function and ms arguments are interchangeable
-// use whichever you prefer!
 var interval = pauseable.setInterval(5000, function() {
   // this is called after 5 seconds
   // then paused for 2 seconds
@@ -65,6 +65,7 @@ var interval = pauseable.setInterval(5000, function() {
 ```
 
 Grouping
+
 ```javascript
 // create a group
 var g = pauseable.createGroup();
