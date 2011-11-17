@@ -1,19 +1,8 @@
-Install
-------------
-
-    npm install pauseable
-
-
-Why
--------
-Javascript is event based by nature. When developing large scale applications that are completely event based, it's complicated to pause the streaming of events, because Javascript never "sleeps". It becomes even more complicated to pause timeouts and intervals keeping track of when they were paused so they can be resumed with the correct time again.
-
-That's where this module comes in. Pauseable helps manage pausing and resuming your applicataion or part of it. It works with EventEmitter and with setInterval and setTimeout.
-
+Pauseable allows you to pause event emitters, timeouts, and intervals. It can easily group multiple of these pauseable objects and pause entire groups.
 
 Usage
 ------------------
-Using a pauseable EventEmitter
+Using pauseable with EventEmitter
 
 ```javascript
 var pauseable = require('pauseable')
@@ -94,6 +83,12 @@ var timeout = g.setTimeout(function() {
 }, 1000);
 ```
 
+Motive
+-------
+Javascript is event based by nature. When developing large scale applications that are completely event based, it becomes complicated to pause the streaming of events, because Javascript never "sleeps". It becomes even more complicated to pause timeouts and intervals having to keep track of when they were paused so they can be resumed with the correct time again.
+
+That's where this module comes in. Pauseable helps manage pausing and resuming your application or part of it. It works with EventEmitter and with setInterval and setTimeout.
+
 
 API
 ---
@@ -160,3 +155,18 @@ Returns `true` if all timers currently in the group are timeouts and their origi
 
 ### group.timers()
 Contains both emitters and timers. Useful if you want to micro manage more.
+
+
+Install
+------------
+
+    npm install pauseable
+
+
+Tests
+-------
+Tests are written with [expresso]()
+
+```bash
+npm test
+```
