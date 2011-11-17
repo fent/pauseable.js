@@ -10,6 +10,9 @@
   },
   "author": "Roly Fentanes (https://github.com/fent)",
   "main": "./lib/index.js",
+  "scripts": {
+    "test": "expresso"
+  },
   "directories": {
     "lib": "./lib"
   },
