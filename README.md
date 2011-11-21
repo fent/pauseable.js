@@ -1,8 +1,10 @@
+# Pauseable [![Build Status](https://secure.travis-ci.org/fent/node-feedsub.png)](http://travis-ci.org/fent/node-feedsub)
+
 Pauseable allows you to pause event emitters, timeouts, and intervals. It can easily group multiple of these pauseable objects and pause entire groups.
 
-Usage
-------------------
-Using pauseable with EventEmitter
+# Usage
+
+## Using pauseable with EventEmitter
 
 ```javascript
 var pauseable = require('pauseable')
@@ -25,7 +27,7 @@ ee.emit('foo', 'hellow');
 pauseable.resume(ee);
 ```
 
-Comes with pauseable setTimeout and setInterval too
+## Comes with pauseable setTimeout and setInterval too
 
 ```javascript
 var timeout = pauseable.setTimeout(function() {
@@ -55,7 +57,7 @@ var interval = pauseable.setInterval(5000, function() {
 });
 ```
 
-Grouping
+## Grouping
 
 ```javascript
 // create a group
@@ -83,17 +85,16 @@ var timeout = g.setTimeout(function() {
 }, 1000);
 ```
 
-Motive
--------
+# Motive
+
 Javascript is event based by nature. When developing large scale applications that are completely event based, it becomes complicated to pause the streaming of events, because Javascript never "sleeps". It becomes even more complicated to pause timeouts and intervals having to keep track of when they were paused so they can be resumed with the correct time again.
 
 That's where this module comes in. Pauseable helps manage pausing and resuming your application or part of it. It works with EventEmitter and with setInterval and setTimeout.
 
 
-API
----
+# API
 
-##Events
+## Events
 ### pauseable.pause(ee, [ms])
 Pauses an instance of EventEmitter. All events get buffered and emitted once the emitter is resumed. Currently only works with EventEmitters. Optional `ms` will pause only for that long.
 
@@ -101,7 +102,7 @@ Pauses an instance of EventEmitter. All events get buffered and emitted once the
 Resumes the emitter. Events can be emitted again. Optional `ms` will resume only for that long.
 
 
-##Timers
+## Timers
 ### pauseable.setTimeout(fn, ms) and pauseable.setInterval(fn, ms)
 Creates a pauseable timeout or interval. `fn` and `ms` are interchangeabale. Returns an instance of timer.
 
@@ -127,7 +128,7 @@ Returns `true` if timer was a timeout and `fn` was called, or `timer.clear()` ha
 If timer is a timeout, this can be used to execute the `callback` when the `fn` in the constructor is called.
 
 
-##Groups
+## Groups
 ### pauseable.createGroup()
 Creates a `group` where emitters and timers can be easily managed.
 
@@ -157,16 +158,20 @@ Returns `true` if all timers currently in the group are timeouts and their origi
 Contains both emitters and timers. Useful if you want to micro manage more.
 
 
-Install
-------------
+# Install
 
     npm install pauseable
 
 
-Tests
--------
-Tests are written with [expresso]()
+# Tests
+
+Tests are written with [expresso](http://visionmedia.github.com/expresso/)
 
 ```bash
 npm test
 ```
+
+
+# License
+
+MIT
