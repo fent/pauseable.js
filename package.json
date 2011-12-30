@@ -11,7 +11,7 @@
   "author": "Roly Fentanes (https://github.com/fent)",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "expresso"
+    "test": "mocha -R spec test/*-test.js"
   },
   "directories": {
     "lib": "./lib"
@@ -20,7 +20,7 @@
     "node": "*"
   },
   "devDependencies": {
-    "expresso": "0.9.x"
+    "mocha": "0.8.x"
   },
   "licenses": [ {
     "type": "MIT",

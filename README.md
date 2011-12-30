@@ -164,8 +164,7 @@ Contains both emitters and timers. Useful if you want to micro manage more.
 
 
 # Tests
-
-Tests are written with [expresso](http://visionmedia.github.com/expresso/)
+Tests are written with [mocha](http://visionmedia.github.com/mocha/)
 
 ```bash
 npm test
