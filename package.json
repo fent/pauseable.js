@@ -16,11 +16,8 @@
   "directories": {
     "lib": "./lib"
   },
-  "engines": {
-    "node": "*"
-  },
   "devDependencies": {
-    "mocha": "0.8.x"
+    "mocha": "x"
   },
   "licenses": [ {
     "type": "MIT",
