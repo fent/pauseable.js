@@ -28,13 +28,13 @@ describe('setTimeout', function() {
 
       setTimeout(function() {
         timeout.pause();
-      }, 100);
-
-      setTimeout(function() {
-        assert.ok(!yes);
-        assert.ok(timeout.isPaused());
-        assert.ok(!timeout.isDone());
-        done();
+        setTimeout(function() {
+          assert.ok(!yes);
+          assert.ok(timeout.isPaused());
+          assert.ok(!timeout.isDone());
+          assert.ok(timeout.next() <= 100);
+          done();
+        }, 100);
       }, 100);
     });
 
@@ -42,6 +42,7 @@ describe('setTimeout', function() {
       it('Calls function', function(done) {
         setTimeout(function() {
           timeout.resume()
+          assert.ok(timeout.next() < 200);
         }, 100);
 
         setTimeout(function() {

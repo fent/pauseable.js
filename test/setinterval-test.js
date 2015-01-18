@@ -41,5 +41,13 @@ describe('setInterval', function() {
       }, 750);
     });
 
+    it('Does not call again after being cleared', function(done) {
+      setTimeout(function() {
+        assert.equal(n, 2);
+        assert.ok(interval.isDone());
+        done();
+      }, 750);
+    });
+
   });
 });
