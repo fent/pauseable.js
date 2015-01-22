@@ -16,15 +16,15 @@ describe('Group', function() {
 
   g.setInterval(function() {
     ee.emit('a');
-  }, 1000);
+  }, 100);
 
   g.setInterval(function() {
     b++;
-  }, 1000);
+  }, 100);
 
   g.setTimeout(function() {
     c = true;
-  }, 100);
+  }, 50);
 
   it('Has correct amount of timers', function() {
     assert.equal(g.timers().length, 4);
@@ -36,18 +36,18 @@ describe('Group', function() {
       assert.equal(b, 1);
       assert.ok(c);
       done();
-    }, 1001);
+    }, 105);
   });
 
   describe('Pause for a given time', function() {
     it('Calls will be delayed', function(done) {
-      g.pause(300);
+      g.pause(30);
 
       setTimeout(function() {
         assert.equal(a, 1);
         assert.equal(b, 1);
         done();
-      }, 1000);
+      }, 100);
     });
 
     describe('Clear', function() {
@@ -60,7 +60,7 @@ describe('Group', function() {
           assert.equal(b, 2);
           assert.ok(c);
           done();
-        }, 1000);
+        }, 100);
       });
     });
 

@@ -14,7 +14,7 @@ describe('setInterval', function() {
     setTimeout(function() {
       assert.equal(n, 1);
       done();
-    }, 101);
+    }, 105);
   });
 
   describe('Pause for a given time', function() {
@@ -27,7 +27,7 @@ describe('setInterval', function() {
       setTimeout(function() {
         assert.ok(interval.isPaused());
         assert.equal(interval.next(), next);
-      }, 40);
+      }, 10);
 
       // n is still 1 because interval was paused
       setTimeout(function() {

@@ -14,7 +14,7 @@ describe('setTimeout', function() {
       assert.ok(!timeout.isPaused());
       assert.ok(timeout.isDone());
       done();
-    }, 101);
+    }, 105);
   });
 
   describe('Pause', function() {
@@ -98,7 +98,7 @@ describe('setTimeout', function() {
         assert.ok(yes);
         assert.ok(timeout.isDone());
         done();
-      }, 31);
+      }, 35);
     });
   });
 
@@ -118,7 +118,7 @@ describe('setTimeout', function() {
         assert.ok(yes);
         assert.ok(ondone);
         done();
-      }, 101);
+      }, 105);
     });
   });
 
