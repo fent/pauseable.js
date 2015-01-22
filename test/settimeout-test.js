@@ -28,11 +28,14 @@ describe('setTimeout', function() {
 
       setTimeout(function() {
         timeout.pause();
+        var next = timeout.next();
+        assert.ok(next > 50 && next <= 100);
+
         setTimeout(function() {
           assert.ok(!yes);
           assert.ok(timeout.isPaused());
           assert.ok(!timeout.isDone());
-          assert.ok(timeout.next() <= 100);
+          assert.equal(timeout.next(), next);
           done();
         }, 100);
       }, 100);
@@ -40,17 +43,19 @@ describe('setTimeout', function() {
 
     describe('Resume after some time', function() {
       it('Calls function', function(done) {
-        setTimeout(function() {
-          timeout.resume()
-          assert.ok(timeout.next() < 200);
-        }, 100);
+        timeout.resume();
+        assert.ok(timeout.next() < 200);
+        timeout.pause();
+        assert.ok(timeout.next() < 200);
+        timeout.resume();
+        assert.ok(timeout.next() < 200);
 
         setTimeout(function() {
           assert.ok(yes);
           assert.ok(!timeout.isPaused());
           assert.ok(timeout.isDone());
           done();
-        }, 250);
+        }, 150);
       });
     });
 

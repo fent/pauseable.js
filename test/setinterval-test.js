@@ -21,6 +21,13 @@ describe('setInterval', function() {
 
     it('Does not call given function since it was paused', function(done) {
       interval.pause(50);
+      var next = interval.next();
+      assert.ok(next >= 0 && next < 100);
+
+      setTimeout(function() {
+        assert.ok(interval.isPaused());
+        assert.equal(interval.next(), next);
+      }, 40);
 
       // n is still 1 because interval was paused
       setTimeout(function() {
