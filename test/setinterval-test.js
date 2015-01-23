@@ -57,4 +57,25 @@ describe('setInterval', function() {
     });
 
   });
+
+  describe('Clear right after resuming', function() {
+    it('Does not call given function at all', function(done) {
+      var n = 0;
+      var interval = p.setInterval(function() {
+        n++;
+      }, 10);
+
+      setTimeout(function() {
+        assert.equal(n, 1);
+        interval.pause();
+        interval.resume();
+        interval.clear();
+
+        setTimeout(function() {
+          assert.equal(n, 1);
+          done();
+        }, 50);
+      }, 15);
+    });
+  });
 });
