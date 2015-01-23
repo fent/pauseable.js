@@ -53,11 +53,12 @@ describe('Group', function() {
     describe('Clear', function() {
       it('EventEmitter will still be there', function(done) {
         g.clear();
+        ee.emit('a');
 
         setTimeout(function() {
           assert.equal(g.timers().length, 1);
           assert.equal(a, 2);
-          assert.equal(b, 2);
+          assert.equal(b, 1);
           assert.ok(c);
           done();
         }, 100);
