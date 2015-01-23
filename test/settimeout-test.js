@@ -1,16 +1,15 @@
-var p = require('..');
+var p      = require('..');
 var assert = require('assert');
+var sinon  = require('sinon');
 
 
 describe('setTimeout', function() {
   it('Calls given function after some time', function(done) {
-    var yes = false;
-    var timeout = p.setTimeout(function() {
-      yes = true;
-    }, 100);
+    var callback = sinon.spy();
+    var timeout = p.setTimeout(callback, 100);
 
     setTimeout(function() {
-      assert.ok(yes);
+      assert.ok(callback.called);
       assert.ok(!timeout.isPaused());
       assert.ok(timeout.isDone());
       done();
@@ -18,13 +17,11 @@ describe('setTimeout', function() {
   });
 
   describe('Pause', function() {
-    var yes = false;
+    var callback = sinon.spy();
     var timeout;
 
     it('Does not call function', function(done) {
-      timeout = p.setTimeout(function() {
-        yes = true;
-      }, 200);
+      timeout = p.setTimeout(callback, 200);
 
       setTimeout(function() {
         timeout.pause();
@@ -32,7 +29,7 @@ describe('setTimeout', function() {
         assert.ok(next > 50 && next <= 100);
 
         setTimeout(function() {
-          assert.ok(!yes);
+          assert.ok(!callback.called);
           assert.ok(timeout.isPaused());
           assert.ok(!timeout.isDone());
           assert.equal(timeout.next(), next);
@@ -51,7 +48,7 @@ describe('setTimeout', function() {
         assert.ok(timeout.next() < 200);
 
         setTimeout(function() {
-          assert.ok(yes);
+          assert.ok(callback.called);
           assert.ok(!timeout.isPaused());
           assert.ok(timeout.isDone());
           done();
@@ -62,24 +59,21 @@ describe('setTimeout', function() {
   });
 
   describe('Pause for some time', function() {
-    var yes = false;
+    var callback = sinon.spy();
     var timeout;
 
     it('Does not call function in time', function() {
-      timeout = p.setTimeout(function() {
-        yes = true;
-      }, 100);
-
+      timeout = p.setTimeout(callback, 100);
       timeout.pause(200);
 
-      assert.ok(!yes);
+      assert.ok(!callback.called);
       assert.ok(timeout.isPaused());
       assert.ok(!timeout.isDone());
     });
 
     it('Calls function after resumed again', function(done) {
       setTimeout(function() {
-        assert.ok(yes);
+        assert.ok(callback.called);
         assert.ok(!timeout.isPaused());
         assert.ok(timeout.isDone());
         done();
@@ -88,14 +82,12 @@ describe('setTimeout', function() {
   });
 
   describe('interchangeableArguments', function() {
-    var yes = false;
-    var timeout = p.setTimeout(30, function() {
-      yes = true;
-    });
+    var callback = sinon.spy();
+    var timeout = p.setTimeout(30, callback);
 
     it('Still calls function', function(done) {
       setTimeout(function() {
-        assert.ok(yes);
+        assert.ok(callback.called);
         assert.ok(timeout.isDone());
         done();
       }, 35);
@@ -103,20 +95,15 @@ describe('setTimeout', function() {
   });
 
   describe('OnDone', function() {
-    var yes = false;
-    var ondone = false;
-    var timeout = p.setTimeout(function() {
-      yes = true;
-    }, 100);
-
-    timeout.onDone(function() {
-      ondone = true;
-    });
+    var callback = sinon.spy();
+    var ondone = sinon.spy();
+    var timeout = p.setTimeout(callback, 100);
+    timeout.onDone(ondone);
 
     it('Function passed to onDone is called when done', function(done) {
       setTimeout(function() {
-        assert.ok(yes);
-        assert.ok(ondone);
+        assert.ok(callback.called);
+        assert.ok(ondone.called);
         done();
       }, 105);
     });
