@@ -1,6 +1,5 @@
-var pauseable = require('../.')
-  , EventEmitter = require('events').EventEmitter
-  ;
+var pauseable = require('../.');
+var EventEmitter = require('events').EventEmitter;
 
 
 // create a group
@@ -23,6 +22,6 @@ ee2.on('back', function() {
   ee1.emit('forth');
 });
 
-var timeout = g.setTimeout(function() {
+g.setTimeout(function() {
   ee2.emit('back', 'poop');
 }, 1000);

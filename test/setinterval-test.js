@@ -1,5 +1,5 @@
-var p = require('..')
-  , assert = require('assert')
+var p = require('..');
+var assert = require('assert');
 
 
 describe('setInterval', function() {

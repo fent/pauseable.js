@@ -1,12 +1,13 @@
-var p = require('..')
-  , assert = require('assert')
-  , EventEmitter = require('events').EventEmitter
+var p = require('..');
+var assert = require('assert');
+var EventEmitter = require('events').EventEmitter;
 
 
 describe('Event Emitter', function() {
-  var ee = new EventEmitter()
-    , foo = bar = 0
-    , a, b, c
+  var ee = new EventEmitter();
+  var foo = 0;
+  var bar = 0;
+  var a, b, c;
 
   ee.on('foo', function(a2, b2) {
     a = a2;
