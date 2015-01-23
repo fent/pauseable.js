@@ -1,30 +1,22 @@
-var p = require('..');
-var assert = require('assert');
+var p            = require('..');
+var assert       = require('assert');
+var sinon        = require('sinon');
 var EventEmitter = require('events').EventEmitter;
 
 
 describe('Group', function() {
   var g = p.createGroup();
-  var a = 0;
-  var b = 0;
-  var c = false;
+  var a = sinon.spy();
+  var b = sinon.spy();
+  var c = sinon.spy();
   
   var ee = g.add(new EventEmitter());
-  ee.on('a', function() {
-    a++;
-  });
-
+  ee.on('a', a);
   g.setInterval(function() {
     ee.emit('a');
   }, 100);
-
-  g.setInterval(function() {
-    b++;
-  }, 100);
-
-  g.setTimeout(function() {
-    c = true;
-  }, 50);
+  g.setInterval(b, 100);
+  g.setTimeout(c, 50);
 
   it('Has correct amount of timers', function() {
     assert.equal(g.timers().length, 4);
@@ -32,20 +24,20 @@ describe('Group', function() {
 
   it('Correctly calls functions and listeners', function(done) {
     setTimeout(function() {
-      assert.equal(a, 1);
-      assert.equal(b, 1);
-      assert.ok(c);
+      assert.equal(a.callCount, 1);
+      assert.equal(b.callCount, 1);
+      assert.ok(c.called);
       done();
     }, 105);
   });
 
   describe('Pause for a given time', function() {
     it('Calls will be delayed', function(done) {
-      g.pause(30);
+      g.pause(50);
 
       setTimeout(function() {
-        assert.equal(a, 1);
-        assert.equal(b, 1);
+        assert.equal(a.callCount, 1);
+        assert.equal(b.callCount, 1);
         done();
       }, 100);
     });
@@ -57,9 +49,9 @@ describe('Group', function() {
 
         setTimeout(function() {
           assert.equal(g.timers().length, 1);
-          assert.equal(a, 2);
-          assert.equal(b, 1);
-          assert.ok(c);
+          assert.equal(a.callCount, 2);
+          assert.equal(b.callCount, 1);
+          assert.ok(c.called);
           done();
         }, 100);
       });
