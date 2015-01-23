@@ -1,13 +1,13 @@
-var p = require('..')
-  , assert = require('assert')
-  , EventEmitter = require('events').EventEmitter
+var p = require('..');
+var assert = require('assert');
+var EventEmitter = require('events').EventEmitter;
 
 
 describe('Group', function() {
-  var g = p.createGroup()
-    , a = 0
-    , b = 0
-    , c = false
+  var g = p.createGroup();
+  var a = 0;
+  var b = 0;
+  var c = false;
   
   var ee = g.add(new EventEmitter());
   ee.on('a', function() {
