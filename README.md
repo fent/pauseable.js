@@ -2,16 +2,17 @@
 
 Pauseable allows you to pause event emitters, timeouts, and intervals. It can group multiple of these pauseable objects and pause entire groups.
 
-[![Build Status](https://secure.travis-ci.org/fent/pauseable.js.png)](http://travis-ci.org/fent/pauseable.js) [![Dependency Status](https://gemnasium.com/fent/pauseable.js.svg)](https://gemnasium.com/fent/pauseable.js)
+[![Build Status](https://secure.travis-ci.org/fent/pauseable.js.svg)](http://travis-ci.org/fent/pauseable.js)
+[![Dependency Status](https://gemnasium.com/fent/pauseable.js.svg)](https://gemnasium.com/fent/pauseable.js)
+[![codecov](https://codecov.io/gh/fent/pauseable.js/branch/master/graph/badge.svg)](https://codecov.io/gh/fent/pauseable.js)
 
 # Usage
 
 ## Using pauseable with EventEmitter
 
 ```javascript
-var pauseable = require('pauseable')
-  , EventEmitter = require('events').EventEmitter
-  ;
+var pauseable = require('pauseable');
+var EventEmitter = require('events').EventEmitter;
 
 var ee = new EventEmitter();
 
@@ -89,9 +90,9 @@ var timeout = g.setTimeout(function() {
 
 # Motive
 
-Javascript is event based by nature. When developing large scale applications that are completely event based, it becomes complicated to pause the streaming of events, because Javascript never "sleeps". It becomes even more complicated to pause timeouts and intervals having to keep track of when they were paused so they can be resumed with the correct time again.
+Javascript is event based by nature. When developing large scale applications that are completely event based, it becomes complicated to pause the streaming of events, because Javascript never "sleeps". It becomes even more complicated to pause timeouts and intervals, having to keep track of when they were paused so they can be resumed with the correct time again.
 
-That's where this module comes in. Pauseable helps manage pausing and resuming your application or part of it. It works with EventEmitter and with setInterval and setTimeout.
+That's where this module comes in. Pauseable helps manage pausing and resuming your application or part of it. It works with `EventEmitter`, with `setInterval` and `setTimeout`.
 
 
 # API
