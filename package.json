@@ -29,10 +29,5 @@
     "mocha": "*",
     "sinon": "^1.12.2"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/fent/pauseable.js/raw/master/LICENSE"
-    }
-  ]
+  "license": "MIT"
 }
