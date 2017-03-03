@@ -93,20 +93,4 @@ describe('setTimeout', function() {
       }, 35);
     });
   });
-
-  describe('OnDone', function() {
-    var callback = sinon.spy();
-    var ondone = sinon.spy();
-    var timeout = p.setTimeout(callback, 100);
-    timeout.onDone(ondone);
-
-    it('Function passed to onDone is called when done', function(done) {
-      setTimeout(function() {
-        assert.ok(callback.called);
-        assert.ok(ondone.called);
-        done();
-      }, 105);
-    });
-  });
-
 });
