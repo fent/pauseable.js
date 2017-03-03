@@ -124,9 +124,6 @@ Clears timeout. Can no longer be resumed.
 ### timer.isPaused()
 Returns `true` if timer is currently paused.
 
-### timer.isDone()
-Returns `true` if timer was a timeout and `fn` was called, or `timer.clear()` has been called.
-
 
 ## Groups
 ### pauseable.createGroup()
