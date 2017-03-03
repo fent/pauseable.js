@@ -127,9 +127,6 @@ Returns `true` if timer is currently paused.
 ### timer.isDone()
 Returns `true` if timer was a timeout and `fn` was called, or `timer.clear()` has been called.
 
-### timer.onDone(callback)
-If timer is a timeout, this can be used to execute the `callback` when the `fn` in the constructor is called.
-
 
 ## Groups
 ### pauseable.createGroup()
@@ -158,7 +155,7 @@ Returns `true` is group is paused.
 Returns `true` if all timers currently in the group are timeouts and their original function has been called or all timers have been cleared.
 
 ### group.timers()
-Contains both emitters and timers. Useful if you want to micro manage more.
+Contains both emitters and timers. For if you want to micro manage more.
 
 
 # Install
