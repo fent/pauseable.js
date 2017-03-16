@@ -27,7 +27,7 @@
   "devDependencies": {
     "istanbul": "*",
     "mocha": "*",
-    "sinon": "^1.12.2"
+    "sinon": "^2.0.0"
   },
   "engines": {
     "node": ">=0.12"
