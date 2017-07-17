@@ -4,11 +4,26 @@ var sinon  = require('sinon');
 
 
 describe('setTimeout', function() {
-  it('Calls given function after some time', function(done) {
-    var callback = sinon.spy();
-    var timeout = p.setTimeout(callback, 100);
+  var clock, mysetTimeout;
+  before(function() {
+    clock = sinon.useFakeTimers();
+    mysetTimeout = function(fn, ms) {
+      setTimeout(fn, ms);
+      clock.tick(ms);
+    };
+  });
+  after(function() { clock.restore(); });
 
-    setTimeout(function() {
+  var callback, timeout;
+  beforeEach(function() {
+    callback = sinon.spy();
+    timeout = p.setTimeout(callback, 100);
+  });
+
+  afterEach(function() { timeout.clear(); });
+
+  it('Calls given function after some time', function(done) {
+    mysetTimeout(function() {
       assert.ok(callback.called);
       assert.ok(!timeout.isPaused());
       assert.ok(timeout.isDone());
@@ -17,76 +32,51 @@ describe('setTimeout', function() {
   });
 
   describe('Pause', function() {
-    var callback = sinon.spy();
-    var timeout;
-
     it('Does not call function', function(done) {
-      timeout = p.setTimeout(callback, 200);
-
-      setTimeout(function() {
+      mysetTimeout(function() {
         timeout.pause();
         var next = timeout.next();
-        assert.ok(next > 50 && next <= 100);
+        assert.equal(next, 50);
 
-        setTimeout(function() {
+        mysetTimeout(function() {
           assert.ok(!callback.called);
           assert.ok(timeout.isPaused());
           assert.ok(!timeout.isDone());
           assert.equal(timeout.next(), next);
           done();
         }, 100);
-      }, 100);
+      }, 50);
     });
 
     describe('Resume after some time', function() {
       it('Calls function', function(done) {
-        timeout.resume();
-        assert.ok(timeout.next() < 200);
         timeout.pause();
-        assert.ok(timeout.next() < 200);
-        timeout.resume();
-        assert.ok(timeout.next() < 200);
+        mysetTimeout(function() {
+          timeout.resume();
+          assert.ok(timeout.next() <= 100);
+          timeout.pause();
+          assert.ok(timeout.next() <= 100);
+          timeout.resume();
+          assert.ok(timeout.next() <= 100);
 
-        setTimeout(function() {
-          assert.ok(callback.called);
-          assert.ok(!timeout.isPaused());
-          assert.ok(timeout.isDone());
-          done();
-        }, 150);
+          mysetTimeout(function() {
+            assert.ok(callback.called);
+            assert.ok(!timeout.isPaused());
+            assert.ok(timeout.isDone());
+            done();
+          }, 150);
+        }, 50);
       });
     });
 
   });
 
-  describe('Pause for some time', function() {
-    var callback = sinon.spy();
-    var timeout;
-
-    it('Does not call function in time', function() {
-      timeout = p.setTimeout(callback, 100);
-      timeout.pause(200);
-
-      assert.ok(!callback.called);
-      assert.ok(timeout.isPaused());
-      assert.ok(!timeout.isDone());
-    });
-
-    it('Calls function after resumed again', function(done) {
-      setTimeout(function() {
-        assert.ok(callback.called);
-        assert.ok(!timeout.isPaused());
-        assert.ok(timeout.isDone());
-        done();
-      }, 350);
-    });
-  });
-
   describe('interchangeableArguments', function() {
-    var callback = sinon.spy();
-    var timeout = p.setTimeout(30, callback);
-
     it('Still calls function', function(done) {
-      setTimeout(function() {
+      var callback = sinon.spy();
+      var timeout = p.setTimeout(30, callback);
+
+      mysetTimeout(function() {
         assert.ok(callback.called);
         assert.ok(timeout.isDone());
         done();
