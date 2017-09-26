@@ -30,7 +30,7 @@
   "devDependencies": {
     "istanbul": "*",
     "mocha": "*",
-    "sinon": "^3.0.0"
+    "sinon": "^4.0.0"
   },
   "engines": {
     "node": ">=0.12"
