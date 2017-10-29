@@ -1,29 +1,29 @@
-var p      = require('..');
-var assert = require('assert');
-var sinon  = require('sinon');
+const p      = require('..');
+const assert = require('assert');
+const sinon  = require('sinon');
 
 
-describe('setTimeout', function() {
+describe('setTimeout', () => {
   var clock, mysetTimeout;
-  before(function() {
+  before(() => {
     clock = sinon.useFakeTimers();
-    mysetTimeout = function(fn, ms) {
+    mysetTimeout = (fn, ms) => {
       setTimeout(fn, ms);
       clock.tick(ms);
     };
   });
-  after(function() { clock.restore(); });
+  after(() => { clock.restore(); });
 
   var callback, timeout;
-  beforeEach(function() {
+  beforeEach(() => {
     callback = sinon.spy();
     timeout = p.setTimeout(callback, 100);
   });
 
-  afterEach(function() { timeout.clear(); });
+  afterEach(() => { timeout.clear(); });
 
-  it('Calls given function after some time', function(done) {
-    mysetTimeout(function() {
+  it('Calls given function after some time', (done) => {
+    mysetTimeout(() => {
       assert.ok(callback.called);
       assert.ok(!timeout.isPaused());
       assert.ok(timeout.isDone());
@@ -31,14 +31,14 @@ describe('setTimeout', function() {
     }, 105);
   });
 
-  describe('Pause', function() {
-    it('Does not call function', function(done) {
-      mysetTimeout(function() {
+  describe('Pause', () => {
+    it('Does not call function', (done) => {
+      mysetTimeout(() => {
         timeout.pause();
         var next = timeout.next();
         assert.equal(next, 50);
 
-        mysetTimeout(function() {
+        mysetTimeout(() => {
           assert.ok(!callback.called);
           assert.ok(timeout.isPaused());
           assert.ok(!timeout.isDone());
@@ -48,10 +48,10 @@ describe('setTimeout', function() {
       }, 50);
     });
 
-    describe('Resume after some time', function() {
-      it('Calls function', function(done) {
+    describe('Resume after some time', () => {
+      it('Calls function', (done) => {
         timeout.pause();
-        mysetTimeout(function() {
+        mysetTimeout(() => {
           timeout.resume();
           assert.ok(timeout.next() <= 100);
           timeout.pause();
@@ -59,7 +59,7 @@ describe('setTimeout', function() {
           timeout.resume();
           assert.ok(timeout.next() <= 100);
 
-          mysetTimeout(function() {
+          mysetTimeout(() => {
             assert.ok(callback.called);
             assert.ok(!timeout.isPaused());
             assert.ok(timeout.isDone());
@@ -71,12 +71,12 @@ describe('setTimeout', function() {
 
   });
 
-  describe('interchangeableArguments', function() {
-    it('Still calls function', function(done) {
+  describe('interchangeableArguments', () => {
+    it('Still calls function', (done) => {
       var callback = sinon.spy();
       var timeout = p.setTimeout(30, callback);
 
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.ok(callback.called);
         assert.ok(timeout.isDone());
         done();
