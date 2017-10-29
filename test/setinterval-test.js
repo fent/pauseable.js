@@ -1,47 +1,47 @@
-var p      = require('..');
-var assert = require('assert');
-var sinon  = require('sinon');
+const p      = require('..');
+const assert = require('assert');
+const sinon  = require('sinon');
 
 
-describe('setInterval', function() {
+describe('setInterval', () => {
   var clock, mysetTimeout;
-  before(function() {
+  before(() => {
     clock = sinon.useFakeTimers();
-    mysetTimeout = function(fn, ms) {
+    mysetTimeout = (fn, ms) => {
       setTimeout(fn, ms);
       clock.tick(ms);
     };
   });
-  after(function() { clock.restore(); });
+  after(() => { clock.restore(); });
 
   var callback, interval;
-  beforeEach(function() {
+  beforeEach(() => {
     callback = sinon.spy();
     interval = p.setInterval(callback, 100);
   });
 
-  afterEach(function() { interval.clear(); });
+  afterEach(() => { interval.clear(); });
 
-  it('Calls given function on interval', function(done) {
-    mysetTimeout(function() {
+  it('Calls given function on interval', (done) => {
+    mysetTimeout(() => {
       assert.equal(callback.callCount, 1);
       done();
     }, 105);
   });
 
-  describe('Pause for a given time', function() {
-    it('Does not call given function since it was paused', function(done) {
+  describe('Pause for a given time', () => {
+    it('Does not call given function since it was paused', (done) => {
       interval.pause(50);
       var next = interval.next();
       assert.equal(next, 100);
 
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.ok(interval.isPaused());
         assert.equal(interval.next(), next);
       }, 10);
 
       // Callback call count is still 0 because interval was paused.
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.equal(callback.callCount, 0);
         assert.ok(!interval.isPaused());
         assert.ok(!interval.isDone());
@@ -49,10 +49,10 @@ describe('setInterval', function() {
       }, 100);
     });
 
-    it('Eventually resumes and keeps calling function', function(done) {
+    it('Eventually resumes and keeps calling function', (done) => {
       interval.pause(50);
       clock.tick(100);
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         interval.clear();
         assert.equal(callback.callCount, 1);
         assert.ok(!interval.isPaused());
@@ -61,9 +61,9 @@ describe('setInterval', function() {
       }, 75);
     });
 
-    it('Does not call after being cleared', function(done) {
+    it('Does not call after being cleared', (done) => {
       interval.clear();
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.equal(callback.callCount, 0);
         assert.ok(interval.isDone());
         done();
@@ -72,15 +72,15 @@ describe('setInterval', function() {
 
   });
 
-  describe('Clear right after resuming', function() {
-    it('Does not call given function at all', function(done) {
-      mysetTimeout(function() {
+  describe('Clear right after resuming', () => {
+    it('Does not call given function at all', (done) => {
+      mysetTimeout(() => {
         assert.equal(callback.callCount, 1);
         interval.pause();
         interval.resume();
         interval.clear();
 
-        mysetTimeout(function() {
+        mysetTimeout(() => {
           assert.equal(callback.callCount, 1);
           done();
         }, 50);
@@ -88,12 +88,12 @@ describe('setInterval', function() {
     });
   });
 
-  describe('interchangeableArguments', function() {
-    it('Still calls function', function(done) {
+  describe('interchangeableArguments', () => {
+    it('Still calls function', (done) => {
       var callback = sinon.spy();
       var interval = p.setInterval(30, callback);
 
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.ok(callback.called);
         assert.ok(!interval.isDone());
         interval.clear();

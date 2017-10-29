@@ -1,10 +1,10 @@
-var p            = require('..');
-var assert       = require('assert');
-var sinon        = require('sinon');
-var EventEmitter = require('events').EventEmitter;
+const p            = require('..');
+const assert       = require('assert');
+const sinon        = require('sinon');
+const EventEmitter = require('events').EventEmitter;
 
 
-describe('Event Emitter', function() {
+describe('Event Emitter', () => {
   var ee = new EventEmitter();
   var foo = sinon.spy();
   var bar = sinon.spy();
@@ -12,8 +12,8 @@ describe('Event Emitter', function() {
   ee.on('foo', foo);
   ee.on('bar', bar);
 
-  describe('Emit', function() {
-    it('Emits correct event with arguments', function() {
+  describe('Emit', () => {
+    it('Emits correct event with arguments', () => {
       ee.emit('foo', 1, 2);
       ee.emit('bar', 'baz');
 
@@ -23,8 +23,8 @@ describe('Event Emitter', function() {
       assert.ok(bar.calledWith('baz'));
     });
 
-    describe('Pause and emit events', function() {
-      it('Listeners do not get called', function() {
+    describe('Pause and emit events', () => {
+      it('Listeners do not get called', () => {
         p.pause(ee);
         ee.emit('foo', 'a', 'b');
         ee.emit('bar', true);
@@ -35,8 +35,8 @@ describe('Event Emitter', function() {
         assert.ok(bar.calledWith('baz'));
       });
 
-      describe('Resume and try emitting again', function() {
-        it('Buffered events call listeners', function() {
+      describe('Resume and try emitting again', () => {
+        it('Buffered events call listeners', () => {
           p.resume(ee);
 
           assert.equal(foo.callCount, 2);
@@ -45,7 +45,7 @@ describe('Event Emitter', function() {
           assert.ok(bar.calledWith(true));
         });
 
-        it('Events emitted call listeners immediately', function() {
+        it('Events emitted call listeners immediately', () => {
           ee.emit('foo', 'mom', 'dad');
           ee.emit('bar', 'hello');
 

@@ -1,5 +1,5 @@
-var pauseable = require('../.');
-var EventEmitter = require('events').EventEmitter;
+const pauseable    = require('../.');
+const EventEmitter = require('events').EventEmitter;
 
 
 // create a group
@@ -9,7 +9,7 @@ var g = pauseable.createGroup();
 var ee1 = g.add(new EventEmitter());
 var ee2 = g.add(new EventEmitter());
 
-ee1.on('forth', function() {
+ee1.on('forth', () => {
   // pause entire group (that means ee1 and ee2) for 500 ms
   // timeout is out of the group by the time this executes
   g.pause(500);
@@ -17,11 +17,11 @@ ee1.on('forth', function() {
   ee2.emit('back');
 });
 
-ee2.on('back', function() {
+ee2.on('back', () => {
   console.log('back');
   ee1.emit('forth');
 });
 
-g.setTimeout(function() {
+g.setTimeout(() => {
   ee2.emit('back', 'poop');
 }, 1000);

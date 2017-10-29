@@ -10,13 +10,13 @@ Pauseable allows you to pause event emitters, timeouts, and intervals. It can gr
 
 ## Using pauseable with EventEmitter
 
-```javascript
-var pauseable = require('pauseable');
-var EventEmitter = require('events').EventEmitter;
+```js
+const pauseable = require('pauseable');
+const EventEmitter = require('events').EventEmitter;
 
 var ee = new EventEmitter();
 
-ee.on('foo', function() { ... });
+ee.on('foo', () => { ... });
 
 // ...later
 pauseable.pause(ee);
@@ -32,19 +32,19 @@ pauseable.resume(ee);
 
 ## Comes with pauseable setTimeout and setInterval too
 
-```javascript
-var timeout = pauseable.setTimeout(function() {
+```js
+var timeout = pauseable.setTimeout(() => {
   // this will take 8 seconds total to execute
   // not 5
 }, 5000);
 
 // pause timeout after 2 secs
-setTimeout(function() {
+setTimeout(() => {
   timeout.pause();
   timeout.isPaused(); // true
   
   // resume after 3
-  setTimeout(function() {
+  setTimeout(() => {
     timeout.resume();
   }, 3000);
 }, 2000);
@@ -52,8 +52,8 @@ setTimeout(function() {
 
 The `function` and `ms` arguments are interchangeable. Use whichever way you prefer!
 
-```javascript
-var interval = pauseable.setInterval(5000, function() {
+```js
+var interval = pauseable.setInterval(5000, () => {
   // this is called after 5 seconds
   // then paused for 2 seconds
   interval.pause(2000);
@@ -62,7 +62,7 @@ var interval = pauseable.setInterval(5000, function() {
 
 ## Grouping
 
-```javascript
+```js
 // create a group
 var g = pauseable.createGroup();
 
@@ -70,7 +70,7 @@ var g = pauseable.createGroup();
 var ee1 = g.add(new EventEmitter());
 var ee2 = g.add(new EventEmitter());
 
-ee1.on('forth', function() {
+ee1.on('forth', () => {
   // pause entire group (that means ee1 and ee2) for 500 ms
   // timeout is out of the group by the time this executes
   g.pause(500);
@@ -78,12 +78,12 @@ ee1.on('forth', function() {
   ee2.emit('back');
 });
 
-ee2.on('back', function() {
+ee2.on('back', () => {
   console.log('back');
   ee1.emit('forth');
 });
 
-var timeout = g.setTimeout(function() {
+var timeout = g.setTimeout(() => {
   ee2.emit('back', 'poop');
 }, 1000);
 ```

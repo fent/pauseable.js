@@ -28,12 +28,12 @@
     "lib": "./lib"
   },
   "devDependencies": {
-    "istanbul": "*",
-    "mocha": "*",
+    "istanbul": "^0.4.5",
+    "mocha": "^4.0.1",
     "sinon": "^4.0.0"
   },
   "engines": {
-    "node": ">=0.12"
+    "node": ">=4"
   },
   "license": "MIT"
 }
