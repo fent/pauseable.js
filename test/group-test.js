@@ -1,22 +1,22 @@
-var p            = require('..');
-var assert       = require('assert');
-var sinon        = require('sinon');
-var EventEmitter = require('events').EventEmitter;
+const p            = require('..');
+const assert       = require('assert');
+const sinon        = require('sinon');
+const EventEmitter = require('events').EventEmitter;
 
 
-describe('Group', function() {
+describe('Group', () => {
   var clock, mysetTimeout;
-  before(function() {
+  before(() => {
     clock = sinon.useFakeTimers();
-    mysetTimeout = function(fn, ms) {
+    mysetTimeout = (fn, ms) => {
       setTimeout(fn, ms);
       clock.tick(ms);
     };
   });
-  after(function() { clock.restore(); });
+  after(() => { clock.restore(); });
 
   var group, a, b, c, ee;
-  beforeEach(function() {
+  beforeEach(() => {
     group = p.createGroup();
     a = sinon.spy();
     b = sinon.spy();
@@ -24,19 +24,19 @@ describe('Group', function() {
     
     ee = group.add(new EventEmitter());
     ee.on('a', a);
-    group.setInterval(function() { ee.emit('a'); }, 100);
+    group.setInterval(() => { ee.emit('a'); }, 100);
     group.setInterval(b, 100);
     group.setTimeout(c, 50);
   });
 
-  afterEach(function() { group.clear(); });
+  afterEach(() => { group.clear(); });
 
-  it('Has correct amount of timers', function() {
+  it('Has correct amount of timers', () => {
     assert.equal(group.timers().length, 4);
   });
 
-  it('Correctly calls functions and listeners', function(done) {
-    mysetTimeout(function() {
+  it('Correctly calls functions and listeners', (done) => {
+    mysetTimeout(() => {
       assert.equal(a.callCount, 1);
       assert.equal(b.callCount, 1);
       assert.ok(c.called);
@@ -44,10 +44,10 @@ describe('Group', function() {
     }, 105);
   });
 
-  describe('Pause for a given time', function() {
-    it('Calls will be delayed', function(done) {
+  describe('Pause for a given time', () => {
+    it('Calls will be delayed', (done) => {
       group.pause(50);
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.equal(a.callCount, 0);
         assert.equal(b.callCount, 0);
         done();
@@ -55,10 +55,10 @@ describe('Group', function() {
     });
   });
 
-  describe('Clear', function() {
-    it('Timers are cleared', function(done) {
+  describe('Clear', () => {
+    it('Timers are cleared', (done) => {
       group.clear();
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.ok(!a.called);
         assert.ok(!b.called);
         assert.ok(!c.called);
@@ -66,10 +66,10 @@ describe('Group', function() {
       }, 300);
     });
 
-    it('EventEmitter will still be there', function(done) {
+    it('EventEmitter will still be there', (done) => {
       group.clear();
       ee.emit('a');
-      mysetTimeout(function() {
+      mysetTimeout(() => {
         assert.equal(group.timers().length, 1);
         assert.equal(a.callCount, 1);
         assert.equal(b.callCount, 0);
