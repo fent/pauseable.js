@@ -28,8 +28,8 @@
     "lib": "./lib"
   },
   "devDependencies": {
-    "istanbul": "*",
-    "mocha": "*",
+    "istanbul": "^0.4.5",
+    "mocha": "^4.0.1",
     "sinon": "^3.0.0"
   },
   "engines": {
