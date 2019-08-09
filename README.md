@@ -14,7 +14,7 @@ Pauseable allows you to pause event emitters, timeouts, and intervals. It can gr
 const pauseable = require('pauseable');
 const EventEmitter = require('events').EventEmitter;
 
-var ee = new EventEmitter();
+let ee = new EventEmitter();
 
 ee.on('foo', () => { ... });
 
@@ -33,7 +33,7 @@ pauseable.resume(ee);
 ## Comes with pauseable setTimeout and setInterval too
 
 ```js
-var timeout = pauseable.setTimeout(() => {
+let timeout = pauseable.setTimeout(() => {
   // this will take 8 seconds total to execute
   // not 5
 }, 5000);
@@ -53,7 +53,7 @@ setTimeout(() => {
 The `function` and `ms` arguments are interchangeable. Use whichever way you prefer!
 
 ```js
-var interval = pauseable.setInterval(5000, () => {
+let interval = pauseable.setInterval(5000, () => {
   // this is called after 5 seconds
   // then paused for 2 seconds
   interval.pause(2000);
@@ -64,11 +64,11 @@ var interval = pauseable.setInterval(5000, () => {
 
 ```js
 // create a group
-var g = pauseable.createGroup();
+let g = pauseable.createGroup();
 
 // make and add emitters to group
-var ee1 = g.add(new EventEmitter());
-var ee2 = g.add(new EventEmitter());
+let ee1 = g.add(new EventEmitter());
+let ee2 = g.add(new EventEmitter());
 
 ee1.on('forth', () => {
   // pause entire group (that means ee1 and ee2) for 500 ms
@@ -83,7 +83,7 @@ ee2.on('back', () => {
   ee1.emit('forth');
 });
 
-var timeout = g.setTimeout(() => {
+let timeout = g.setTimeout(() => {
   ee2.emit('back', 'poop');
 }, 1000);
 ```

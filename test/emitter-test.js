@@ -5,9 +5,9 @@ const EventEmitter = require('events').EventEmitter;
 
 
 describe('Event Emitter', () => {
-  var ee = new EventEmitter();
-  var foo = sinon.spy();
-  var bar = sinon.spy();
+  let ee = new EventEmitter();
+  let foo = sinon.spy();
+  let bar = sinon.spy();
 
   ee.on('foo', foo);
   ee.on('bar', bar);

@@ -5,7 +5,7 @@ const EventEmitter = require('events').EventEmitter;
 
 
 describe('Group', () => {
-  var clock, mysetTimeout;
+  let clock, mysetTimeout;
   before(() => {
     clock = sinon.useFakeTimers();
     mysetTimeout = (fn, ms) => {
@@ -15,7 +15,7 @@ describe('Group', () => {
   });
   after(() => { clock.restore(); });
 
-  var group, a, b, c, ee;
+  let group, a, b, c, ee;
   beforeEach(() => {
     group = p.createGroup();
     a = sinon.spy();

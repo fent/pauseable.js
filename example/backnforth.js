@@ -3,11 +3,11 @@ const EventEmitter = require('events').EventEmitter;
 
 
 // create a group
-var g = pauseable.createGroup();
+let g = pauseable.createGroup();
 
 // make and add emitters to group
-var ee1 = g.add(new EventEmitter());
-var ee2 = g.add(new EventEmitter());
+let ee1 = g.add(new EventEmitter());
+let ee2 = g.add(new EventEmitter());
 
 ee1.on('forth', () => {
   // pause entire group (that means ee1 and ee2) for 500 ms

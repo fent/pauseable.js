@@ -4,7 +4,7 @@ const sinon  = require('sinon');
 
 
 describe('setTimeout', () => {
-  var clock, mysetTimeout;
+  let clock, mysetTimeout;
   before(() => {
     clock = sinon.useFakeTimers();
     mysetTimeout = (fn, ms) => {
@@ -14,7 +14,7 @@ describe('setTimeout', () => {
   });
   after(() => { clock.restore(); });
 
-  var callback, timeout;
+  let callback, timeout;
   beforeEach(() => {
     callback = sinon.spy();
     timeout = p.setTimeout(callback, 100);
@@ -35,7 +35,7 @@ describe('setTimeout', () => {
     it('Does not call function', (done) => {
       mysetTimeout(() => {
         timeout.pause();
-        var next = timeout.next();
+        let next = timeout.next();
         assert.equal(next, 50);
 
         mysetTimeout(() => {
@@ -73,8 +73,8 @@ describe('setTimeout', () => {
 
   describe('interchangeableArguments', () => {
     it('Still calls function', (done) => {
-      var callback = sinon.spy();
-      var timeout = p.setTimeout(30, callback);
+      let callback = sinon.spy();
+      let timeout = p.setTimeout(30, callback);
 
       mysetTimeout(() => {
         assert.ok(callback.called);
