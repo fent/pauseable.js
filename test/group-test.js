@@ -77,5 +77,26 @@ describe('Group', () => {
         done();
       }, 100);
     });
+
+    describe('Timer inside a callback', () => {
+      it('Timers are cleared', (done) => {
+        let called = false;
+        let a = group.setTimeout(() => {
+          called = true;
+          a.clear();
+        }, 10);
+        assert.equal(group.timers().length, 5);
+        mysetTimeout(() => {
+          assert.ok(called);
+          assert.equal(group.timers().length, 4);
+          mysetTimeout(() => {
+            assert.ok(!a.called);
+            assert.ok(b.called);
+            assert.ok(c.called);
+          }, 300);
+          done();
+        }, 10);
+      });
+    });
   });
 });
