@@ -2,7 +2,6 @@
 
 Pauseable allows you to pause event emitters, timeouts, and intervals. It can group multiple of these pauseable objects and pause entire groups.
 
-[![Build Status](https://secure.travis-ci.org/fent/pauseable.js.svg)](http://travis-ci.org/fent/pauseable.js)
 [![Dependency Status](https://david-dm.org/fent/pauseable.js.svg)](https://david-dm.org/fent/pauseable.js)
 [![codecov](https://codecov.io/gh/fent/pauseable.js/branch/master/graph/badge.svg)](https://codecov.io/gh/fent/pauseable.js)
 

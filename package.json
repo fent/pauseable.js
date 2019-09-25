@@ -33,7 +33,7 @@
     "sinon": "^7.2.3"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "license": "MIT"
 }
