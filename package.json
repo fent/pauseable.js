@@ -30,7 +30,7 @@
   "devDependencies": {
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
-    "sinon": "^8.0.0"
+    "sinon": "^9.0.0"
   },
   "engines": {
     "node": ">=8"
