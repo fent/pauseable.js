@@ -22,12 +22,15 @@
     "lib"
   ],
   "scripts": {
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "test": "nyc --reporter=lcov --reporter=text-summary mocha -- test/*-test.js"
   },
   "directories": {
     "lib": "./lib"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.15",
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
     "sinon": "^9.0.0"

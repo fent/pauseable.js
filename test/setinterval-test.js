@@ -1,7 +1,6 @@
-const p      = require('..');
+const p = require('..');
 const assert = require('assert');
-const sinon  = require('sinon');
-
+const sinon = require('sinon');
 
 describe('setInterval', () => {
   let clock, mysetTimeout;
@@ -12,7 +11,9 @@ describe('setInterval', () => {
       clock.tick(ms);
     };
   });
-  after(() => { clock.restore(); });
+  after(() => {
+    clock.restore();
+  });
 
   let callback, interval;
   beforeEach(() => {
@@ -20,7 +21,9 @@ describe('setInterval', () => {
     interval = p.setInterval(callback, 100);
   });
 
-  afterEach(() => { interval.clear(); });
+  afterEach(() => {
+    interval.clear();
+  });
 
   it('Calls given function on interval', (done) => {
     mysetTimeout(() => {
@@ -32,7 +35,7 @@ describe('setInterval', () => {
   describe('Pause for a given time', () => {
     it('Does not call given function since it was paused', (done) => {
       interval.pause(50);
-      let next = interval.next();
+      const next = interval.next();
       assert.equal(next, 100);
 
       mysetTimeout(() => {
@@ -69,7 +72,6 @@ describe('setInterval', () => {
         done();
       }, 100);
     });
-
   });
 
   describe('Clear right after resuming', () => {
@@ -90,8 +92,8 @@ describe('setInterval', () => {
 
   describe('interchangeableArguments', () => {
     it('Still calls function', (done) => {
-      let callback = sinon.spy();
-      let interval = p.setInterval(30, callback);
+      const callback = sinon.spy();
+      const interval = p.setInterval(30, callback);
 
       mysetTimeout(() => {
         assert.ok(callback.called);

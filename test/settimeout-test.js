@@ -1,7 +1,6 @@
-const p      = require('..');
+const p = require('..');
 const assert = require('assert');
-const sinon  = require('sinon');
-
+const sinon = require('sinon');
 
 describe('setTimeout', () => {
   let clock, mysetTimeout;
@@ -12,7 +11,9 @@ describe('setTimeout', () => {
       clock.tick(ms);
     };
   });
-  after(() => { clock.restore(); });
+  after(() => {
+    clock.restore();
+  });
 
   let callback, timeout;
   beforeEach(() => {
@@ -20,7 +21,9 @@ describe('setTimeout', () => {
     timeout = p.setTimeout(callback, 100);
   });
 
-  afterEach(() => { timeout.clear(); });
+  afterEach(() => {
+    timeout.clear();
+  });
 
   it('Calls given function after some time', (done) => {
     mysetTimeout(() => {
@@ -35,7 +38,7 @@ describe('setTimeout', () => {
     it('Does not call function', (done) => {
       mysetTimeout(() => {
         timeout.pause();
-        let next = timeout.next();
+        const next = timeout.next();
         assert.equal(next, 50);
 
         mysetTimeout(() => {
@@ -68,13 +71,12 @@ describe('setTimeout', () => {
         }, 50);
       });
     });
-
   });
 
   describe('interchangeableArguments', () => {
     it('Still calls function', (done) => {
-      let callback = sinon.spy();
-      let timeout = p.setTimeout(30, callback);
+      const callback = sinon.spy();
+      const timeout = p.setTimeout(30, callback);
 
       mysetTimeout(() => {
         assert.ok(callback.called);

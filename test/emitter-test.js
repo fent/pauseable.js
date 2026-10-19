@@ -1,13 +1,12 @@
-const p            = require('..');
-const assert       = require('assert');
-const sinon        = require('sinon');
+const p = require('..');
+const assert = require('assert');
+const sinon = require('sinon');
 const EventEmitter = require('events').EventEmitter;
 
-
 describe('Event Emitter', () => {
-  let ee = new EventEmitter();
-  let foo = sinon.spy();
-  let bar = sinon.spy();
+  const ee = new EventEmitter();
+  const foo = sinon.spy();
+  const bar = sinon.spy();
 
   ee.on('foo', foo);
   ee.on('bar', bar);
@@ -55,7 +54,6 @@ describe('Event Emitter', () => {
           assert.ok(bar.calledWith('hello'));
         });
       });
-
     });
   });
 });

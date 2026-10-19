@@ -1,8 +1,7 @@
-const p            = require('..');
-const assert       = require('assert');
-const sinon        = require('sinon');
+const p = require('..');
+const assert = require('assert');
+const sinon = require('sinon');
 const EventEmitter = require('events').EventEmitter;
-
 
 describe('Group', () => {
   let clock, mysetTimeout;
@@ -13,7 +12,9 @@ describe('Group', () => {
       clock.tick(ms);
     };
   });
-  after(() => { clock.restore(); });
+  after(() => {
+    clock.restore();
+  });
 
   let group, a, b, c, ee;
   beforeEach(() => {
@@ -21,15 +22,19 @@ describe('Group', () => {
     a = sinon.spy();
     b = sinon.spy();
     c = sinon.spy();
-    
+
     ee = group.add(new EventEmitter());
     ee.on('a', a);
-    group.setInterval(() => { ee.emit('a'); }, 100);
+    group.setInterval(() => {
+      ee.emit('a');
+    }, 100);
     group.setInterval(b, 100);
     group.setTimeout(c, 50);
   });
 
-  afterEach(() => { group.clear(); });
+  afterEach(() => {
+    group.clear();
+  });
 
   it('Has correct amount of timers', () => {
     assert.equal(group.timers().length, 4);
@@ -81,7 +86,7 @@ describe('Group', () => {
     describe('Timer inside a callback', () => {
       it('Timers are cleared', (done) => {
         let called = false;
-        let a = group.setTimeout(() => {
+        const a = group.setTimeout(() => {
           called = true;
           a.clear();
         }, 10);
