@@ -25,6 +25,7 @@ describe('Event Emitter', () => {
     describe('Pause and emit events', () => {
       it('Listeners do not get called', () => {
         p.pause(ee);
+        p.pause(ee);
         ee.emit('foo', 'a', 'b');
         ee.emit('bar', true);
 
@@ -36,6 +37,7 @@ describe('Event Emitter', () => {
 
       describe('Resume and try emitting again', () => {
         it('Buffered events call listeners', () => {
+          p.resume(ee);
           p.resume(ee);
 
           assert.equal(foo.callCount, 2);
@@ -52,6 +54,33 @@ describe('Event Emitter', () => {
           assert.ok(foo.calledWith('mom', 'dad'));
           assert.equal(bar.callCount, 3);
           assert.ok(bar.calledWith('hello'));
+        });
+
+        it('Pause and resume again when bufferedEvents already exists', () => {
+          p.pause(ee);
+          assert.ok(ee.paused);
+          p.resume(ee);
+          assert.ok(!ee.paused);
+        });
+
+        it('Pause with auto-resume', (done) => {
+          p.pause(ee, 20);
+          assert.ok(ee.paused);
+          setTimeout(() => {
+            assert.ok(!ee.paused);
+            done();
+          }, 30);
+        });
+
+        it('Resume with auto-pause', (done) => {
+          p.pause(ee);
+          p.resume(ee, 20);
+          assert.ok(!ee.paused);
+          setTimeout(() => {
+            assert.ok(ee.paused);
+            p.resume(ee);
+            done();
+          }, 30);
         });
       });
     });

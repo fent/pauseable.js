@@ -60,6 +60,35 @@ describe('Group', () => {
     });
   });
 
+  describe('Pause and resume', () => {
+    it('Pauses and resumes group with timers and event emitter', (done) => {
+      assert.ok(!group.isPaused());
+      assert.ok(!group.isDone());
+      group.pause();
+      assert.ok(group.isPaused());
+      group.resume(40);
+      assert.ok(!group.isPaused());
+      mysetTimeout(() => {
+        const intervalTimer = group.timers()[1];
+        assert.ok(intervalTimer.isPaused());
+        assert.ok(ee.paused);
+        done();
+      }, 50);
+    });
+  });
+
+  describe('isDone', () => {
+    it('Marks group as done when all timers complete', (done) => {
+      const g = p.createGroup();
+      g.setTimeout(() => {}, 20);
+      assert.ok(!g.isDone());
+      mysetTimeout(() => {
+        assert.ok(g.isDone());
+        done();
+      }, 30);
+    });
+  });
+
   describe('Clear', () => {
     it('Timers are cleared', (done) => {
       group.clear();

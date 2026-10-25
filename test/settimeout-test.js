@@ -30,6 +30,10 @@ describe('setTimeout', () => {
       assert.ok(callback.called);
       assert.ok(!timeout.isPaused());
       assert.ok(timeout.isDone());
+      // Calling pause, resume, or clear when already done returns early
+      timeout.pause();
+      timeout.resume();
+      timeout.clear();
       done();
     }, 105);
   });
@@ -38,6 +42,7 @@ describe('setTimeout', () => {
     it('Does not call function', (done) => {
       mysetTimeout(() => {
         timeout.pause();
+        timeout.pause(); // calling when already paused returns early
         const next = timeout.next();
         assert.equal(next, 50);
 
@@ -56,6 +61,7 @@ describe('setTimeout', () => {
         timeout.pause();
         mysetTimeout(() => {
           timeout.resume();
+          timeout.resume(); // calling when already resumed returns early
           assert.ok(timeout.next() <= 100);
           timeout.pause();
           assert.ok(timeout.next() <= 100);
@@ -69,6 +75,16 @@ describe('setTimeout', () => {
             done();
           }, 150);
         }, 50);
+      });
+
+      it('Repauses after given time with pauseIn', (done) => {
+        timeout.pause();
+        timeout.resume(30);
+        assert.ok(!timeout.isPaused());
+        mysetTimeout(() => {
+          assert.ok(timeout.isPaused());
+          done();
+        }, 40);
       });
     });
   });
