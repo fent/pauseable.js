@@ -36,7 +36,7 @@
     "sinon": "^22.1.0"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=20"
   },
   "license": "MIT"
 }

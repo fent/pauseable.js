@@ -1,7 +1,7 @@
 const p = require('..');
-const assert = require('assert');
+const assert = require('node:assert');
 const sinon = require('sinon');
-const EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('node:events').EventEmitter;
 
 describe('Group', () => {
   let clock, mysetTimeout;

@@ -1,5 +1,5 @@
 const pauseable = require('../.');
-const EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('node:events').EventEmitter;
 
 // create a group
 const g = pauseable.createGroup();
