@@ -1,9 +1,11 @@
-const p = require('..');
-const assert = require('node:assert');
-const sinon = require('sinon');
+import assert from 'node:assert';
+import sinon from 'sinon';
+import * as p from '../src';
 
 describe('setInterval', () => {
-  let clock, mysetTimeout;
+  let clock: sinon.SinonFakeTimers;
+  let mysetTimeout: (fn: () => void, ms: number) => void;
+
   before(() => {
     clock = sinon.useFakeTimers();
     mysetTimeout = (fn, ms) => {
@@ -15,7 +17,9 @@ describe('setInterval', () => {
     clock.restore();
   });
 
-  let callback, interval;
+  let callback: sinon.SinonSpy;
+  let interval: p.Timer;
+
   beforeEach(() => {
     callback = sinon.spy();
     interval = p.setInterval(callback, 100);
@@ -92,13 +96,13 @@ describe('setInterval', () => {
 
   describe('interchangeableArguments', () => {
     it('Still calls function', (done) => {
-      const callback = sinon.spy();
-      const interval = p.setInterval(30, callback);
+      const callbackSpy = sinon.spy();
+      const testInterval = p.setInterval(30, callbackSpy);
 
       mysetTimeout(() => {
-        assert.ok(callback.called);
-        assert.ok(!interval.isDone());
-        interval.clear();
+        assert.ok(callbackSpy.called);
+        assert.ok(!testInterval.isDone());
+        testInterval.clear();
         done();
       }, 35);
     });

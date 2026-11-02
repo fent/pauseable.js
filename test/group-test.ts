@@ -1,10 +1,12 @@
-const p = require('..');
-const assert = require('node:assert');
-const sinon = require('sinon');
-const EventEmitter = require('node:events').EventEmitter;
+import assert from 'node:assert';
+import { EventEmitter } from 'node:events';
+import sinon from 'sinon';
+import * as p from '../src';
 
 describe('Group', () => {
-  let clock, mysetTimeout;
+  let clock: sinon.SinonFakeTimers;
+  let mysetTimeout: (fn: () => void, ms: number) => void;
+
   before(() => {
     clock = sinon.useFakeTimers();
     mysetTimeout = (fn, ms) => {
@@ -16,7 +18,12 @@ describe('Group', () => {
     clock.restore();
   });
 
-  let group, a, b, c, ee;
+  let group: p.Group;
+  let a: sinon.SinonSpy;
+  let b: sinon.SinonSpy;
+  let c: sinon.SinonSpy;
+  let ee: EventEmitter;
+
   beforeEach(() => {
     group = p.createGroup();
     a = sinon.spy();
@@ -38,6 +45,25 @@ describe('Group', () => {
 
   it('Has correct amount of timers', () => {
     assert.equal(group.timers().length, 4);
+  });
+
+  describe('interchangeableArguments', () => {
+    it('Still calls functions when arguments are swapped', (done) => {
+      const g = p.createGroup();
+      const timeoutSpy = sinon.spy();
+      const intervalSpy = sinon.spy();
+      const timeoutTimer = g.setTimeout(30, timeoutSpy);
+      const intervalTimer = g.setInterval(30, intervalSpy);
+
+      mysetTimeout(() => {
+        assert.ok(timeoutSpy.called);
+        assert.ok(intervalSpy.called);
+        timeoutTimer.clear();
+        intervalTimer.clear();
+        g.clear();
+        done();
+      }, 35);
+    });
   });
 
   it('Correctly calls functions and listeners', (done) => {
@@ -69,9 +95,9 @@ describe('Group', () => {
       group.resume(40);
       assert.ok(!group.isPaused());
       mysetTimeout(() => {
-        const intervalTimer = group.timers()[1];
+        const intervalTimer = group.timers()[1] as p.Timer;
         assert.ok(intervalTimer.isPaused());
-        assert.ok(ee.paused);
+        assert.ok((ee as p.PauseableEmitter).paused);
         done();
       }, 50);
     });
@@ -114,17 +140,18 @@ describe('Group', () => {
 
     describe('Timer inside a callback', () => {
       it('Timers are cleared', (done) => {
-        let called = false;
-        const a = group.setTimeout(() => {
-          called = true;
-          a.clear();
-        }, 10);
+        let callbackTimer: p.Timer;
+        const timerCallback = sinon.spy(() => {
+          callbackTimer.clear();
+        });
+        callbackTimer = group.setTimeout(timerCallback, 10);
         assert.equal(group.timers().length, 5);
         mysetTimeout(() => {
-          assert.ok(called);
+          assert.equal(timerCallback.callCount, 1);
           assert.equal(group.timers().length, 4);
           mysetTimeout(() => {
-            assert.ok(!a.called);
+            assert.ok(callbackTimer.isDone());
+            assert.equal(timerCallback.callCount, 1);
             assert.ok(b.called);
             assert.ok(c.called);
           }, 300);
