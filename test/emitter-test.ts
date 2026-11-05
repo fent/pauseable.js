@@ -28,13 +28,24 @@ describe('Event Emitter', () => {
         p.pause(ee);
         const res1 = ee.emit('foo', 'a', 'b');
         const res2 = ee.emit('bar', true);
+        const res3 = ee.emit('unregistered');
 
-        assert.strictEqual(res1, undefined);
-        assert.strictEqual(res2, undefined);
+        assert.strictEqual(res1, true);
+        assert.strictEqual(res2, true);
+        assert.strictEqual(res3, false);
         assert.equal(foo.callCount, 1);
         assert.ok(foo.calledWith(1, 2));
         assert.equal(bar.callCount, 1);
         assert.ok(bar.calledWith('baz'));
+      });
+
+      it('Returns true when listenerCount is not defined on emitter', () => {
+        const customEe: p.PauseableEmitter = {
+          emit: sinon.spy(() => true),
+        };
+        p.pause(customEe);
+        const res = customEe.emit('anything');
+        assert.strictEqual(res, true);
       });
 
       describe('Resume and try emitting again', () => {

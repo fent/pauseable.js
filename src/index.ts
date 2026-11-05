@@ -1,11 +1,12 @@
 export interface PauseableEmitter {
   paused?: boolean;
-  emit(event: string | symbol, ...args: unknown[]): void;
+  emit(event: string | symbol, ...args: unknown[]): boolean;
+  listenerCount?(event: string | symbol): number;
 }
 
 interface InternalPauseableEmitter extends PauseableEmitter {
   _bufferedEvents?: [string | symbol, ...unknown[]][];
-  _oldEmit?: (event: string | symbol, ...args: unknown[]) => void;
+  _oldEmit?: (event: string | symbol, ...args: unknown[]) => boolean;
 }
 
 export interface Timer {
@@ -53,6 +54,10 @@ export function pause(ee: PauseableEmitter, ms?: number): void {
   target._oldEmit = target.emit;
   target.emit = (event: string | symbol, ...args: unknown[]) => {
     buffered.push([event, ...args]);
+    if (typeof target.listenerCount === 'function') {
+      return target.listenerCount(event) > 0;
+    }
+    return true;
   };
 
   if (ms) {
