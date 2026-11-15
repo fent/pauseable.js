@@ -7,6 +7,8 @@ export interface PauseableEmitter {
 interface InternalPauseableEmitter extends PauseableEmitter {
   _bufferedEvents?: [string | symbol, ...unknown[]][];
   _oldEmit?: (event: string | symbol, ...args: unknown[]) => boolean;
+  _pauseTimeout?: NodeJS.Timeout;
+  _resumeTimeout?: NodeJS.Timeout;
 }
 
 export interface Timer {
@@ -46,6 +48,10 @@ export function pause(ee: PauseableEmitter, ms?: number): void {
   const target = ee as InternalPauseableEmitter;
   if (target.paused) return;
   target.paused = true;
+  clearTimeout(target._pauseTimeout);
+  clearTimeout(target._resumeTimeout);
+  target._pauseTimeout = undefined;
+  target._resumeTimeout = undefined;
   if (!target._bufferedEvents) {
     target._bufferedEvents = [];
   }
@@ -61,7 +67,8 @@ export function pause(ee: PauseableEmitter, ms?: number): void {
   };
 
   if (ms) {
-    globalThis.setTimeout(() => {
+    target._resumeTimeout = globalThis.setTimeout(() => {
+      target._resumeTimeout = undefined;
       resume(ee);
     }, ms);
   }
@@ -71,6 +78,10 @@ export function resume(ee: PauseableEmitter, ms?: number): void {
   const target = ee as InternalPauseableEmitter;
   if (!target.paused) return;
   target.paused = false;
+  clearTimeout(target._pauseTimeout);
+  clearTimeout(target._resumeTimeout);
+  target._pauseTimeout = undefined;
+  target._resumeTimeout = undefined;
 
   if (target._oldEmit) {
     target.emit = target._oldEmit;
@@ -87,7 +98,8 @@ export function resume(ee: PauseableEmitter, ms?: number): void {
   }
 
   if (ms) {
-    globalThis.setTimeout(() => {
+    target._pauseTimeout = globalThis.setTimeout(() => {
+      target._pauseTimeout = undefined;
       pause(ee);
     }, ms);
   }

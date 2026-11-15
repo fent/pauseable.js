@@ -76,6 +76,35 @@ describe('Event Emitter', () => {
           assert.deepStrictEqual(received, ['data:1', 'other:2', 'data:3']);
         });
 
+        it('Cancels auto-resume when manually resumed', () => {
+          const clock = sinon.useFakeTimers();
+          try {
+            const emitter = new EventEmitter();
+            p.pause(emitter, 50);
+            p.resume(emitter);
+            p.pause(emitter);
+            clock.tick(60);
+            assert.strictEqual((emitter as p.PauseableEmitter).paused, true);
+          } finally {
+            clock.restore();
+          }
+        });
+
+        it('Cancels auto-pause when manually paused', () => {
+          const clock = sinon.useFakeTimers();
+          try {
+            const emitter = new EventEmitter();
+            p.pause(emitter);
+            p.resume(emitter, 50);
+            p.pause(emitter);
+            p.resume(emitter);
+            clock.tick(60);
+            assert.strictEqual((emitter as p.PauseableEmitter).paused, false);
+          } finally {
+            clock.restore();
+          }
+        });
+
         it('Buffers events emitted while replaying', () => {
           const ordered = new EventEmitter();
           const received: string[] = [];
