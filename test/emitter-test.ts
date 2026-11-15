@@ -39,6 +39,26 @@ describe('Event Emitter', () => {
         assert.ok(bar.calledWith('baz'));
       });
 
+      it('Throws an unhandled error while paused', () => {
+        const emitter = new EventEmitter();
+        p.pause(emitter);
+        assert.throws(() => emitter.emit('error', new Error('boom')), /boom/);
+        p.resume(emitter);
+      });
+
+      it('Buffers an error when a listener exists', () => {
+        const emitter = new EventEmitter();
+        const received: Error[] = [];
+        emitter.on('error', (err: Error) => received.push(err));
+        p.pause(emitter);
+        const err = new Error('buffered');
+        emitter.emit('error', err);
+        assert.deepStrictEqual(received, []);
+
+        p.resume(emitter);
+        assert.deepStrictEqual(received, [err]);
+      });
+
       it('Returns true when listenerCount is not defined on emitter', () => {
         const customEe: p.PauseableEmitter = {
           emit: sinon.spy(() => true),

@@ -57,13 +57,19 @@ export function pause(ee: PauseableEmitter, ms?: number): void {
   }
   const buffered = target._bufferedEvents;
 
-  target._oldEmit = target.emit;
+  const oldEmit = target.emit;
+  target._oldEmit = oldEmit;
   target.emit = (event: string | symbol, ...args: unknown[]) => {
-    buffered.push([event, ...args]);
-    if (typeof target.listenerCount === 'function') {
-      return target.listenerCount(event) > 0;
+    const listenerCount =
+      typeof target.listenerCount === 'function'
+        ? target.listenerCount(event)
+        : undefined;
+    if (event === 'error' && listenerCount === 0) {
+      return oldEmit.call(target, event, ...args);
     }
-    return true;
+
+    buffered.push([event, ...args]);
+    return listenerCount != null ? listenerCount > 0 : true;
   };
 
   if (ms) {
