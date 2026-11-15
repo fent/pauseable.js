@@ -113,6 +113,23 @@ describe('Group', () => {
         done();
       }, 30);
     });
+
+    it('Is done with only emitters', () => {
+      const g = p.createGroup();
+      g.add(new EventEmitter());
+      assert.ok(g.isDone());
+    });
+
+    it('Becomes incomplete when a timer is added after done', (done) => {
+      const g = p.createGroup();
+      assert.ok(g.isDone());
+      g.setTimeout(() => {}, 20);
+      assert.ok(!g.isDone());
+      mysetTimeout(() => {
+        assert.ok(g.isDone());
+        done();
+      }, 30);
+    });
   });
 
   describe('Clear', () => {

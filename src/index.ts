@@ -127,15 +127,16 @@ function dispatchGroupAction(
 export function createGroup(): Group {
   const timers: GroupItem[] = [];
   let paused = false;
-  let done = false;
+  let done = true;
 
   const group: Group = {
     add(item) {
       const internal = item as InternalGroupItem;
       if (typeof internal._onDone === 'function') {
+        done = false;
         internal._onDone(() => {
           timers.splice(timers.indexOf(item), 1);
-          if (timers.length === 0) {
+          if (!timers.some((timer) => !isEmitter(timer))) {
             done = true;
           }
         });
