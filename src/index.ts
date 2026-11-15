@@ -76,12 +76,13 @@ export function resume(ee: PauseableEmitter, ms?: number): void {
     target.emit = target._oldEmit;
   }
   if (target._bufferedEvents) {
-    for (let i = target._bufferedEvents.length - 1; i >= 0; i--) {
-      const eventArgs = target._bufferedEvents.pop();
-      if (eventArgs) {
-        const [event, ...args] = eventArgs;
-        target.emit(event, ...args);
-      }
+    // Swap the buffer so events emitted during replay, including from a
+    // listener that pauses again, stay isolated from this replay.
+    const buffered = target._bufferedEvents;
+    target._bufferedEvents = [];
+    for (const eventArgs of buffered) {
+      const [event, ...args] = eventArgs;
+      target.emit(event, ...args);
     }
   }
 

@@ -59,6 +59,52 @@ describe('Event Emitter', () => {
           assert.ok(bar.calledWith(true));
         });
 
+        it('Replays buffered events in order', () => {
+          const ordered = new EventEmitter();
+          const received: string[] = [];
+          ordered.on('data', (value: number) => received.push(`data:${value}`));
+          ordered.on('other', (value: number) =>
+            received.push(`other:${value}`),
+          );
+
+          p.pause(ordered);
+          ordered.emit('data', 1);
+          ordered.emit('other', 2);
+          ordered.emit('data', 3);
+          p.resume(ordered);
+
+          assert.deepStrictEqual(received, ['data:1', 'other:2', 'data:3']);
+        });
+
+        it('Buffers events emitted while replaying', () => {
+          const ordered = new EventEmitter();
+          const received: string[] = [];
+          ordered.on('data', (value: string) => received.push(`data:${value}`));
+          ordered.on('first', () => {
+            received.push('first');
+            p.pause(ordered);
+            ordered.emit('data', 'later-1');
+            ordered.emit('data', 'later-2');
+          });
+
+          p.pause(ordered);
+          ordered.emit('data', 'before-1');
+          ordered.emit('first');
+          ordered.emit('data', 'before-2');
+          p.resume(ordered);
+
+          assert.deepStrictEqual(received, ['data:before-1', 'first']);
+
+          p.resume(ordered);
+          assert.deepStrictEqual(received, [
+            'data:before-1',
+            'first',
+            'data:later-1',
+            'data:later-2',
+            'data:before-2',
+          ]);
+        });
+
         it('Events emitted call listeners immediately', () => {
           ee.emit('foo', 'mom', 'dad');
           ee.emit('bar', 'hello');
